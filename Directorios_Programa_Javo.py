@@ -21,8 +21,12 @@ from shutil import copyfile
 def separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMANO_PARTICION):
 #### Se crea una array vacio donde estarán todos los archivos
     archivos = []
+    
+### Prueba de barra en la función
+    if FUENTE[-1] != "/":
+        FUENTE += "/"
+        
 #### Se recorren todos los archivos en FUENTE
-###### Va a ir lo de la barrita (/): [:-1]
     for elemento in os.listdir(FUENTE):
         datos = FUENTE + elemento
         if (os.path.getsize(datos) > 0):
