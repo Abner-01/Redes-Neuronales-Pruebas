@@ -14,7 +14,7 @@
 # Se puede agregar el parámetro extra NOMBRE para asignar un nombre personalizado a los archivos
 # en caso contrario, se asignara automáticamente ENTRENAMIENTO y PRUEBA respectivamente 
 
-
+import cv2
 import random
 import os
 from shutil import copyfile
@@ -58,6 +58,8 @@ def separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMANO_PARTICION, NOMBRE_ENTREN
         copyfile(temp_train_data, final_test_data)
 # AQUÍ TERMINA EL CODIGO PARA REPARTIR EN CONJUNTOS DE ENTRENAMIENTO Y PRUEBA 
 
+
+
 # AQUÍ EMPIEZA EL CÓDIGO PARA CAMBIAR NOMBRES
     contador_de_archivos = 0 #Este va a ser un iterador externo para enumerar los archivos
     
@@ -66,32 +68,40 @@ def separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMANO_PARTICION, NOMBRE_ENTREN
         os.chdir(ENTRENAMIENTO) 
         for i in os.listdir(ENTRENAMIENTO):
             contador_de_archivos += 1
-            nombre_del_archivo, extension = os.path.splitext(i)#Obtenemos la extension 
-            os.rename(i, "ENTRENAMIENTO_" + str(contador_de_archivos) + extension)
+            imagen = cv2.imread(i)
+            cv2.imwrite('imagen.jpg', imagen, [int(cv2.IMWRITE_JPEG_QUALITY), 100])
+            os.rename('imagen.jpg', "ENTRENAMIENTO_" + str(contador_de_archivos) + '.jpg')
+            os.remove(i)
         contador_de_archivos = 0
         
     if NOMBRE_PRUEBA is None: #Si no tiene un nombre personalizado de prueba
         os.chdir(PRUEBA) 
         for i in os.listdir(PRUEBA):
             contador_de_archivos += 1
-            nombre_del_archivo, extension = os.path.splitext(i)#Obtenemos la extension 
-            os.rename(i, "PRUEBA_" + str(contador_de_archivos) + extension)
+            imagen = cv2.imread(i)
+            cv2.imwrite('imagen.jpg', imagen, [int(cv2.IMWRITE_JPEG_QUALITY), 100]) 
+            os.rename('imagen.jpg', "PRUEBA_" + str(contador_de_archivos) + '.jpg')
+            os.remove(i)
         contador_de_archivos = 0
     
     if NOMBRE_ENTRENAMIENTO is not None:  #Si tiene un nombre personalizado de entrenamiento
         os.chdir(ENTRENAMIENTO) 
         for i in os.listdir(ENTRENAMIENTO):
             contador_de_archivos += 1
-            nombre_del_archivo, extension = os.path.splitext(i)#Obtenemos la extension 
-            os.rename(i, NOMBRE_ENTRENAMIENTO + str(contador_de_archivos) + extension)
+            imagen = cv2.imread(i)
+            cv2.imwrite('imagen.jpg', imagen, [int(cv2.IMWRITE_JPEG_QUALITY), 100]) 
+            os.rename('imagen.jpg', NOMBRE_ENTRENAMIENTO + str(contador_de_archivos) + '.jpg')
+            os.remove(i)
         contador_de_archivos = 0
         
     if NOMBRE_PRUEBA is not None: #Si tiene un nombre personalizado de prueba
         os.chdir(PRUEBA) 
         for i in os.listdir(PRUEBA):
             contador_de_archivos += 1
-            nombre_del_archivo, extension = os.path.splitext(i)#Obtenemos la extension 
-            os.rename(i, NOMBRE_PRUEBA + str(contador_de_archivos) + extension)
+            imagen = cv2.imread(i)
+            cv2.imwrite('imagen.jpg', imagen, [int(cv2.IMWRITE_JPEG_QUALITY), 100]) 
+            os.rename('imagen.jpg', NOMBRE_PRUEBA + str(contador_de_archivos) + '.jpg')
+            os.remove(i)
         contador_de_archivos = 0
      
 
@@ -99,9 +109,9 @@ def separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMANO_PARTICION, NOMBRE_ENTREN
 
 
    
-FUENTE = "D:/felip/Redes_Neuronales_Team/Redes-Neuronales-Pruebas/Prueba del programa/FUENTE"
-ENTRENAMIENTO = "D:/felip/Redes_Neuronales_Team/Redes-Neuronales-Pruebas/Prueba del programa/ENTRENAMIENTO/"
-PRUEBA = "D:/felip/Redes_Neuronales_Team/Redes-Neuronales-Pruebas/Prueba del programa/PRUEBA"
+FUENTE = "D:/PruebasRedesNeuronales/fuente"
+ENTRENAMIENTO = "D:/PruebasRedesNeuronales/entrenamiento"
+PRUEBA = "D:/PruebasRedesNeuronales/prueba"
 TAMAÑO_PARTICION = .8
 
-separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMAÑO_PARTICION, NOMBRE_ENTRENAMIENTO = "ABNER_MI_PERRO", NOMBRE_PRUEBA = "JAVO_TAMBOR" )
+separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMAÑO_PARTICION, NOMBRE_ENTRENAMIENTO = "linda", NOMBRE_PRUEBA = "te_extrano" )
