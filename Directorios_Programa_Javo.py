@@ -11,6 +11,8 @@
 # Also -- All images should be checked, and if they have a zero file length,
 # they will not be copied over
 
+# Se puede agregar el parámetro extra NOMBRE para asignar un nombre personalizado a los archivos
+# en caso contrario, se asignara automáticamente ENTRENAMIENTO y PRUEBA respectivamente 
 
 
 import random
@@ -18,11 +20,19 @@ import os
 from shutil import copyfile
 
 
-def separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMANO_PARTICION):
+def separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMANO_PARTICION, NOMBRE_ENTRENAMIENTO = None, NOMBRE_PRUEBA = None):
 #### Se crea una array vacio donde estarán todos los archivos
     archivos = []
+    
+### Prueba de barra en la función
+    if FUENTE[-1] != "/":
+        FUENTE += "/"
+    if ENTRENAMIENTO[-1] != "/":
+        ENTRENAMIENTO += "/"
+    if PRUEBA[-1] != "/":
+        PRUEBA += "/"
+        
 #### Se recorren todos los archivos en FUENTE
-###### Va a ir lo de la barrita (/): [:-1]
     for elemento in os.listdir(FUENTE):
         datos = FUENTE + elemento
         if (os.path.getsize(datos) > 0):
@@ -46,14 +56,52 @@ def separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMANO_PARTICION):
         temp_test_data = FUENTE + elementos
         final_test_data =  PRUEBA + elementos
         copyfile(temp_train_data, final_test_data)
-# YOUR CODE ENDS HERE
-CAT_SOURCE_DIR = "/tmp/PetImages/Cat/"
-TRAINING_CATS_DIR = "/tmp/cats-v-dogs/training/cats/"
-TESTING_CATS_DIR = "/tmp/cats-v-dogs/testing/cats/"
-DOG_SOURCE_DIR = "/tmp/PetImages/Dog/"
-TRAINING_DOGS_DIR = "/tmp/cats-v-dogs/training/dogs/"
-TESTING_DOGS_DIR = "/tmp/cats-v-dogs/testing/dogs/"
+# AQUÍ TERMINA EL CODIGO PARA REPARTIR EN CONJUNTOS DE ENTRENAMIENTO Y PRUEBA 
 
-split_size = .9
-separar_datos(CAT_SOURCE_DIR, TRAINING_CATS_DIR, TESTING_CATS_DIR, split_size)
-separar_datos(DOG_SOURCE_DIR, TRAINING_DOGS_DIR, TESTING_DOGS_DIR, split_size)
+# AQUÍ EMPIEZA EL CÓDIGO PARA CAMBIAR NOMBRES
+    contador_de_archivos = 0 #Este va a ser un iterador externo para enumerar los archivos
+    
+    
+    if NOMBRE_ENTRENAMIENTO is None:  #Si no tiene un nombre personalizado de entrenamiento
+        os.chdir(ENTRENAMIENTO) 
+        for i in os.listdir(ENTRENAMIENTO):
+            contador_de_archivos += 1
+            nombre_del_archivo, extension = os.path.splitext(i)#Obtenemos la extension 
+            os.rename(i, "ENTRENAMIENTO_" + str(contador_de_archivos) + extension)
+        contador_de_archivos = 0
+        
+    if NOMBRE_PRUEBA is None: #Si no tiene un nombre personalizado de prueba
+        os.chdir(PRUEBA) 
+        for i in os.listdir(PRUEBA):
+            contador_de_archivos += 1
+            nombre_del_archivo, extension = os.path.splitext(i)#Obtenemos la extension 
+            os.rename(i, "PRUEBA_" + str(contador_de_archivos) + extension)
+        contador_de_archivos = 0
+    
+    if NOMBRE_ENTRENAMIENTO is not None:  #Si tiene un nombre personalizado de entrenamiento
+        os.chdir(ENTRENAMIENTO) 
+        for i in os.listdir(ENTRENAMIENTO):
+            contador_de_archivos += 1
+            nombre_del_archivo, extension = os.path.splitext(i)#Obtenemos la extension 
+            os.rename(i, NOMBRE_ENTRENAMIENTO + str(contador_de_archivos) + extension)
+        contador_de_archivos = 0
+        
+    if NOMBRE_PRUEBA is not None: #Si tiene un nombre personalizado de prueba
+        os.chdir(PRUEBA) 
+        for i in os.listdir(PRUEBA):
+            contador_de_archivos += 1
+            nombre_del_archivo, extension = os.path.splitext(i)#Obtenemos la extension 
+            os.rename(i, NOMBRE_PRUEBA + str(contador_de_archivos) + extension)
+        contador_de_archivos = 0
+     
+
+
+
+
+   
+FUENTE = "D:/felip/Redes_Neuronales_Team/Redes-Neuronales-Pruebas/Prueba del programa/FUENTE"
+ENTRENAMIENTO = "D:/felip/Redes_Neuronales_Team/Redes-Neuronales-Pruebas/Prueba del programa/ENTRENAMIENTO/"
+PRUEBA = "D:/felip/Redes_Neuronales_Team/Redes-Neuronales-Pruebas/Prueba del programa/PRUEBA"
+TAMAÑO_PARTICION = .8
+
+separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMAÑO_PARTICION, NOMBRE_ENTRENAMIENTO = "ABNER_MI_PERRO", NOMBRE_PRUEBA = "JAVO_TAMBOR" )
