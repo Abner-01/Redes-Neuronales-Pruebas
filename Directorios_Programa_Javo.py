@@ -19,7 +19,7 @@ import random
 import os
 from shutil import copyfile
 import shutil
-
+#Jeje
 
 def separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMANO_PARTICION, NOMBRE_ENTRENAMIENTO = None, NOMBRE_PRUEBA = None):
 ### Borramos los directorios en caso de ya existir 
