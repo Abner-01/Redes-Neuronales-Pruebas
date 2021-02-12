@@ -18,9 +18,20 @@ import cv2
 import random
 import os
 from shutil import copyfile
-
+import shutil
+#Jeje
 
 def separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMANO_PARTICION, NOMBRE_ENTRENAMIENTO = None, NOMBRE_PRUEBA = None):
+### Borramos los directorios en caso de ya existir 
+### Para ENTRENAMIENTO
+    if os.path.exists(ENTRENAMIENTO):
+        shutil.rmtree(ENTRENAMIENTO)
+### Para PRUEBA
+    if os.path.exists(PRUEBA):
+        shutil.rmtree(PRUEBA)
+    os.mkdir(ENTRENAMIENTO)
+    os.mkdir(PRUEBA)
+    
 #### Se crea una array vacio donde estarán todos los archivos
     archivos = []
     
@@ -62,8 +73,7 @@ def separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMANO_PARTICION, NOMBRE_ENTREN
 
 # AQUÍ EMPIEZA EL CÓDIGO PARA CAMBIAR NOMBRES
     contador_de_archivos = 0 #Este va a ser un iterador externo para enumerar los archivos
-    
-    
+        
     if NOMBRE_ENTRENAMIENTO is None:  #Si no tiene un nombre personalizado de entrenamiento
         os.chdir(ENTRENAMIENTO) 
         for i in os.listdir(ENTRENAMIENTO):
