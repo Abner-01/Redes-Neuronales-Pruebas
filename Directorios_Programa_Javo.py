@@ -14,26 +14,13 @@
 # Se puede agregar el parámetro extra NOMBRE para asignar un nombre personalizado a los archivos
 # en caso contrario, se asignara automáticamente ENTRENAMIENTO y PRUEBA respectivamente 
 
-
 import random
 import os
 from shutil import copyfile
 import shutil
-#Jeje
+
 
 def separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMANO_PARTICION, NOMBRE_ENTRENAMIENTO = None, NOMBRE_PRUEBA = None):
-### Borramos los directorios en caso de ya existir 
-### Para ENTRENAMIENTO
-    if os.path.exists(ENTRENAMIENTO):
-        shutil.rmtree(ENTRENAMIENTO)
-### Para PRUEBA
-    if os.path.exists(PRUEBA):
-        shutil.rmtree(PRUEBA)
-    os.mkdir(ENTRENAMIENTO)
-    os.mkdir(PRUEBA)
-    
-#### Se crea una array vacio donde estarán todos los archivos
-    archivos = []
     
 ### Prueba de barra en la función
     if FUENTE[-1] != "/":
@@ -43,6 +30,19 @@ def separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMANO_PARTICION, NOMBRE_ENTREN
     if PRUEBA[-1] != "/":
         PRUEBA += "/"
         
+### Borramos los directorios en caso de ya existir 
+    if os.path.exists(ENTRENAMIENTO):
+        shutil.rmtree(ENTRENAMIENTO)     
+        
+    if os.path.exists(PRUEBA):
+        shutil.rmtree(PRUEBA)
+        
+    os.mkdir(ENTRENAMIENTO)
+    os.mkdir(PRUEBA)  
+     
+#### Se crea una array vacio donde estarán todos los archivos
+    archivos = []
+          
 #### Se recorren todos los archivos en FUENTE
     for elemento in os.listdir(FUENTE):
         datos = FUENTE + elemento
@@ -71,33 +71,35 @@ def separar_datos(FUENTE, ENTRENAMIENTO, PRUEBA, TAMANO_PARTICION, NOMBRE_ENTREN
 
 # AQUÍ EMPIEZA EL CÓDIGO PARA CAMBIAR NOMBRES
     contador_de_archivos = 0 #Este va a ser un iterador externo para enumerar los archivos
-        
+    
+    os.chdir(PRUEBA)
+    os.chdir(ENTRENAMIENTO)
     if NOMBRE_ENTRENAMIENTO is None:  #Si no tiene un nombre personalizado de entrenamiento
-        os.chdir(ENTRENAMIENTO) 
         for i in os.listdir(ENTRENAMIENTO):
             contador_de_archivos += 1
             nombre_del_archivo, extension = os.path.splitext(i)#Obtenemos la extension 
             os.rename(i, "ENTRENAMIENTO_" + str(contador_de_archivos) + extension)
         contador_de_archivos = 0
         
+    
+    os.chdir(PRUEBA)
     if NOMBRE_PRUEBA is None: #Si no tiene un nombre personalizado de prueba
-        os.chdir(PRUEBA) 
         for i in os.listdir(PRUEBA):
             contador_de_archivos += 1
             nombre_del_archivo, extension = os.path.splitext(i)#Obtenemos la extension 
             os.rename(i, "PRUEBA_" + str(contador_de_archivos) + extension)
         contador_de_archivos = 0
     
+    os.chdir(ENTRENAMIENTO)
     if NOMBRE_ENTRENAMIENTO is not None:  #Si tiene un nombre personalizado de entrenamiento
-        os.chdir(ENTRENAMIENTO) 
         for i in os.listdir(ENTRENAMIENTO):
             contador_de_archivos += 1
             nombre_del_archivo, extension = os.path.splitext(i)#Obtenemos la extension 
             os.rename(i, NOMBRE_ENTRENAMIENTO + str(contador_de_archivos) + extension)
         contador_de_archivos = 0
         
-    if NOMBRE_PRUEBA is not None: #Si tiene un nombre personalizado de prueba
-        os.chdir(PRUEBA) 
+    os.chdir(PRUEBA) 
+    if NOMBRE_PRUEBA is not None: #Si tiene un nombre personalizado de prueba 
         for i in os.listdir(PRUEBA):
             contador_de_archivos += 1
             nombre_del_archivo, extension = os.path.splitext(i)#Obtenemos la extension 
